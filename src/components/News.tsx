@@ -120,14 +120,9 @@ const News = () => {
     navigate(`/blog/${post.slug}`);
   };
 
-  // Handle view all articles click
+  // Handle view all articles click - navigate to blog page
   const handleViewAllClick = () => {
-    setShowAllArticles(true);
-  };
-
-  // Handle show less articles click
-  const handleShowLessClick = () => {
-    setShowAllArticles(false);
+    navigate('/blog');
   };
 
   // Format date for display
@@ -145,8 +140,8 @@ const News = () => {
     setError(null);
   };
 
-  // Get posts to display based on showAllArticles state
-  const postsToDisplay = showAllArticles ? posts : posts.slice(0, 3);
+  // Get posts to display - always show only first 3 on main page
+  const postsToDisplay = posts.slice(0, 3);
 
   return (
     <section ref={sectionRef} id="news" className="py-16 md:py-20 lg:py-24" style={{ backgroundColor: '#f5f5f0' }}>
@@ -290,30 +285,18 @@ const News = () => {
           </div>
         )}
 
-        {/* View All / Show Less Button */}
+        {/* View All Button */}
         {!isLoading && !error && posts.length > 3 && (
           <div className="text-center mt-12">
-            {!showAllArticles ? (
-              <button
-                onClick={handleViewAllClick}
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-600 to-yellow-500 text-white px-8 py-4 rounded-xl font-semibold hover:from-yellow-700 hover:to-yellow-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
-                type="button"
-                aria-label="View all articles"
-              >
-                <span>View All Articles</span>
-                <ExternalLink className="h-5 w-5" />
-              </button>
-            ) : (
-              <button
-                onClick={handleShowLessClick}
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
-                type="button"
-                aria-label="Show fewer articles"
-              >
-                <span>Show Less</span>
-                <ExternalLink className="h-5 w-5 transform rotate-180" />
-              </button>
-            )}
+            <button
+              onClick={handleViewAllClick}
+              className="inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-600 to-yellow-500 text-white px-8 py-4 rounded-xl font-semibold hover:from-yellow-700 hover:to-yellow-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+              type="button"
+              aria-label="View all articles"
+            >
+              <span>View All Articles</span>
+              <ExternalLink className="h-5 w-5" />
+            </button>
           </div>
         )}
       </div>
