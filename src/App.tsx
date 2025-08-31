@@ -16,7 +16,7 @@ function App() {
         <Route path="/services/:serviceId" element={<ServiceDetailPage />} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/:postId" element={<BlogPostPage />} />
+        <Route path="/blog/:postId" element={<BlogPage />} />
       </Routes>
     </div>
   );
