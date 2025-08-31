@@ -121,8 +121,21 @@ const News = () => {
 
   // Handle view all articles click
   const handleViewAllClick = () => {
-    // Navigate to the blog page that shows all articles
-    navigate('/blog');
+    // Scroll to top of news section and show all articles
+    const newsSection = document.querySelector('#news');
+    if (newsSection) {
+      const headerOffset = 80;
+      const elementPosition = newsSection.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+    
+    // Open external blog in new tab
+    window.open('https://xelf.ghost.io/', '_blank', 'noopener,noreferrer');
   };
 
   // Format date for display
@@ -287,12 +300,13 @@ const News = () => {
           <div className="text-center mt-12">
             <button
               onClick={handleViewAllClick}
-              className="inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-600 to-yellow-500 text-white px-8 py-4 rounded-xl font-semibold hover:from-yellow-700 hover:to-yellow-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+              className="inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-600 to-yellow-500 text-white px-6 md:px-8 py-3 md:py-4 rounded-xl font-semibold hover:from-yellow-700 hover:to-yellow-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg text-sm md:text-base"
               type="button"
-              aria-label="View all articles"
+              aria-label="View all articles on our blog"
+              title="Opens our blog in a new tab"
             >
-              <span>View All Articles</span>
-              <ExternalLink className="h-5 w-5" />
+              <span>Visit Our Blog</span>
+              <ExternalLink className="h-4 w-4 md:h-5 md:w-5" />
             </button>
           </div>
         )}

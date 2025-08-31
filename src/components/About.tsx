@@ -95,7 +95,28 @@ const About = () => {
               loading="lazy"
               src="https://i.postimg.cc/Px2cZQf5/7-X2-A2923-1.jpg"
               alt="SOK Law Associates Team"
-              className="about-img shadow-2xl transform hover:scale-105 transition-transform duration-500 rounded-2xl"
+              className="about-img shadow-2xl transform hover:scale-105 transition-transform duration-500 rounded-2xl w-full h-auto"
+              style={{
+                objectFit: 'cover',
+                objectPosition: 'center center',
+                maxHeight: '500px'
+              }}
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+                if (target.parentElement) {
+                  target.parentElement.style.background = 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%)';
+                  target.parentElement.style.minHeight = '400px';
+                  target.parentElement.style.display = 'flex';
+                  target.parentElement.style.alignItems = 'center';
+                  target.parentElement.style.justifyContent = 'center';
+                  
+                  const placeholder = document.createElement('div');
+                  placeholder.className = 'text-white text-6xl font-bold';
+                  placeholder.textContent = 'SOK';
+                  target.parentElement.appendChild(placeholder);
+                }
+              }}
             />
             <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full opacity-20"></div>
             <div className="absolute -top-6 -left-6 w-16 h-16 bg-gradient-to-br from-blue-800 to-blue-900 rounded-full opacity-20"></div>

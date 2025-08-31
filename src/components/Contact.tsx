@@ -222,7 +222,7 @@ const Contact = () => {
   /**
    * Main form submission handler with comprehensive error handling
    */
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e?: React.FormEvent) => {
     if (e) {
       e.preventDefault();
     }
@@ -287,7 +287,7 @@ Please follow up with this client within 24 hours.
       console.error('Form submission error:', error);
       
       // Implement retry logic for network errors
-      if (retryCount < 2 && (error.message.includes('network') || error.message.includes('timeout'))) {
+      if (retryCount < 2 && (error instanceof Error && (error.message.includes('network') || error.message.includes('timeout')))) {
         setRetryCount(prev => prev + 1);
         setTimeout(() => {
           handleSubmit();
@@ -349,7 +349,7 @@ Please follow up with this client within 24 hours.
           <div className="animate-on-scroll opacity-0 w-24 h-1 bg-gradient-to-r from-yellow-600 to-yellow-500 mx-auto mt-6"></div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16">
           {/* Contact Information */}
           <div className="space-y-8">
             <div className="animate-on-scroll opacity-0">
@@ -358,26 +358,26 @@ Please follow up with this client within 24 hours.
               </h3>
               
               {officeInfo.map((office, index) => (
-                <div key={index} className="mb-8 p-6 bg-gray-50 rounded-xl border hover:shadow-lg transition-shadow duration-300">
+                <div key={index} className="mb-8 p-4 md:p-6 bg-gray-50 rounded-xl border hover:shadow-lg transition-shadow duration-300">
                   <h4 className="text-xl font-semibold mb-4">
                     {office.city}
                   </h4>
                   <div className="space-y-3">
                     <div className="flex items-start space-x-3">
                       <MapPin className="h-5 w-5 mt-1 flex-shrink-0 text-yellow-600" />
-                      <p className="whitespace-pre-line">
+                      <p className="whitespace-pre-line text-sm md:text-base">
                         {office.address}
                       </p>
                     </div>
                     <div className="flex items-center space-x-3">
                       <Phone className="h-5 w-5 flex-shrink-0 text-yellow-600" />
-                      <a href={`tel:${office.phone}`} className="transition-colors hover:text-yellow-600">
+                      <a href={`tel:${office.phone}`} className="transition-colors hover:text-yellow-600 text-sm md:text-base">
                         {office.phone}
                       </a>
                     </div>
                     <div className="flex items-center space-x-3">
                       <Mail className="h-5 w-5 flex-shrink-0 text-yellow-600" />
-                      <a href={`mailto:${office.email}`} className="transition-colors hover:text-yellow-600">
+                      <a href={`mailto:${office.email}`} className="transition-colors hover:text-yellow-600 text-sm md:text-base">
                         {office.email}
                       </a>
                     </div>
@@ -386,12 +386,12 @@ Please follow up with this client within 24 hours.
               ))}
             </div>
 
-            <div className="animate-on-scroll opacity-0 p-6 bg-yellow-50 rounded-xl border border-yellow-200">
+            <div className="animate-on-scroll opacity-0 p-4 md:p-6 bg-yellow-50 rounded-xl border border-yellow-200">
               <h4 className="text-xl font-semibold mb-4 flex items-center text-yellow-800">
                 <Clock className="h-5 w-5 mr-2 text-yellow-600" />
                 Business Hours
               </h4>
-              <div className="space-y-2 text-yellow-700">
+              <div className="space-y-2 text-yellow-700 text-sm md:text-base">
                 <div className="flex justify-between">
                   <span>Monday - Friday</span>
                   <span>8:00 AM - 6:00 PM</span>
@@ -410,14 +410,14 @@ Please follow up with this client within 24 hours.
 
           {/* Contact Form */}
           <div className="animate-on-scroll opacity-0">
-            <div className="bg-white p-8 rounded-2xl shadow-xl border">
+            <div className="bg-white p-4 md:p-8 rounded-2xl shadow-xl border">
               <h3 className="text-2xl font-bold mb-6 text-center text-gray-800">
                 Request a Consultation
               </h3>
               
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* First Name and Last Name Row */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       First Name *
@@ -429,6 +429,7 @@ Please follow up with this client within 24 hours.
                       onChange={handleInputChange}
                       placeholder="Your first name"
                       required
+                      autoComplete="given-name"
                       className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-colors ${
                         validationErrors.firstName 
                           ? 'border-red-500 focus:border-red-500' 
@@ -450,6 +451,7 @@ Please follow up with this client within 24 hours.
                       onChange={handleInputChange}
                       placeholder="Your last name"
                       required
+                      autoComplete="family-name"
                       className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-colors ${
                         validationErrors.lastName 
                           ? 'border-red-500 focus:border-red-500' 
@@ -463,7 +465,7 @@ Please follow up with this client within 24 hours.
                 </div>
 
                 {/* Email and Phone Row */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Email Address *
@@ -475,6 +477,7 @@ Please follow up with this client within 24 hours.
                       onChange={handleInputChange}
                       placeholder="your.email@example.com"
                       required
+                      autoComplete="email"
                       className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-colors ${
                         validationErrors.email 
                           ? 'border-red-500 focus:border-red-500' 
@@ -495,6 +498,7 @@ Please follow up with this client within 24 hours.
                       value={formData.phone}
                       onChange={handleInputChange}
                       placeholder="+254 700 000 000"
+                      autoComplete="tel"
                       className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-colors ${
                         validationErrors.phone 
                           ? 'border-red-500 focus:border-red-500' 
@@ -517,6 +521,7 @@ Please follow up with this client within 24 hours.
                     value={formData.legalService}
                     onChange={handleInputChange}
                     required
+                    aria-label="Select legal service"
                     className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-colors appearance-none bg-white pr-12 ${
                       validationErrors.legalService 
                         ? 'border-red-500 focus:border-red-500' 
@@ -556,12 +561,16 @@ Please follow up with this client within 24 hours.
                     placeholder="Please describe your legal matter and how we can help you..."
                     required
                     rows={5}
+                    maxLength={1000}
                     className={`w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-colors resize-vertical ${
                       validationErrors.message 
                         ? 'border-red-500 focus:border-red-500' 
                         : 'border-gray-200 focus:border-blue-500'
                     }`}
                   ></textarea>
+                  <div className="text-right text-xs text-gray-500 mt-1">
+                    {formData.message.length}/1000 characters
+                  </div>
                   {validationErrors.message && (
                     <p className="text-red-500 text-sm mt-1">{validationErrors.message}</p>
                   )}
@@ -571,6 +580,7 @@ Please follow up with this client within 24 hours.
                 <button
                   type="submit"
                   disabled={isSubmitting}
+                  aria-label={isSubmitting ? 'Sending message...' : 'Send message'}
                   className="w-full bg-gradient-to-r from-amber-600 to-amber-700 text-white font-semibold py-4 px-6 rounded-xl hover:from-amber-700 hover:to-amber-800 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95"
                 >
                   {isSubmitting ? (
