@@ -29,7 +29,6 @@ const News = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
-  const [showAllArticles, setShowAllArticles] = useState(false);
 
   // Animate cards when visible
   useEffect(() => {
@@ -63,12 +62,12 @@ const News = () => {
         setIsLoading(true);
         setError(null);
         
-        // Ghost CMS API endpoint with proper parameters - fetch more posts for "View All"
+        // Ghost CMS API endpoint with proper parameters
         const ghostApiUrl = 'https://xelf.ghost.io/ghost/api/v3/content/posts/';
         const apiKey = '367cdb8a8abe78fe688f751c76';
         const params = new URLSearchParams({
           key: apiKey,
-          limit: '12', // Fetch more posts so we have content for "View All"
+          limit: '6',
           include: 'tags,authors',
           fields: 'id,slug,title,excerpt,feature_image,published_at,reading_time',
           formats: 'html'
@@ -120,8 +119,9 @@ const News = () => {
     navigate(`/blog/${post.slug}`);
   };
 
-  // Handle view all articles click - navigate to blog page
+  // Handle view all articles click
   const handleViewAllClick = () => {
+    // Navigate to the blog page that shows all articles
     navigate('/blog');
   };
 
@@ -139,9 +139,6 @@ const News = () => {
     setRetryCount(0);
     setError(null);
   };
-
-  // Get posts to display - always show only first 3 on main page
-  const postsToDisplay = posts.slice(0, 3);
 
   return (
     <section ref={sectionRef} id="news" className="py-16 md:py-20 lg:py-24" style={{ backgroundColor: '#f5f5f0' }}>
@@ -193,9 +190,9 @@ const News = () => {
         )}
 
         {/* Posts Grid */}
-        {!isLoading && !error && postsToDisplay.length > 0 && (
+        {!isLoading && !error && posts.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {postsToDisplay.map((post, index) => (
+            {posts.map((post, index) => (
               <article
                 key={post.id}
                 className="news-card bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl opacity-0 group"
@@ -286,7 +283,7 @@ const News = () => {
         )}
 
         {/* View All Button */}
-        {!isLoading && !error && posts.length > 3 && (
+        {!isLoading && !error && posts.length > 0 && (
           <div className="text-center mt-12">
             <button
               onClick={handleViewAllClick}
