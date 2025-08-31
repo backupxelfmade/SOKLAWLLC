@@ -29,6 +29,7 @@ const News = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+  const [showAllArticles, setShowAllArticles] = useState(false);
 
   // Animate cards when visible
   useEffect(() => {
@@ -62,12 +63,12 @@ const News = () => {
         setIsLoading(true);
         setError(null);
         
-        // Ghost CMS API endpoint with proper parameters
+        // Ghost CMS API endpoint with proper parameters - fetch more posts for "View All"
         const ghostApiUrl = 'https://xelf.ghost.io/ghost/api/v3/content/posts/';
         const apiKey = '367cdb8a8abe78fe688f751c76';
         const params = new URLSearchParams({
           key: apiKey,
-          limit: '6',
+          limit: '12', // Fetch more posts so we have content for "View All"
           include: 'tags,authors',
           fields: 'id,slug,title,excerpt,feature_image,published_at,reading_time',
           formats: 'html'
@@ -121,8 +122,12 @@ const News = () => {
 
   // Handle view all articles click
   const handleViewAllClick = () => {
-    // Navigate to the blog page that shows all articles
-    navigate('/blog');
+    setShowAllArticles(true);
+  };
+
+  // Handle show less articles click
+  const handleShowLessClick = () => {
+    setShowAllArticles(false);
   };
 
   // Format date for display
@@ -139,6 +144,9 @@ const News = () => {
     setRetryCount(0);
     setError(null);
   };
+
+  // Get posts to display based on showAllArticles state
+  const postsToDisplay = showAllArticles ? posts : posts.slice(0, 3);
 
   return (
     <section ref={sectionRef} id="news" className="py-16 md:py-20 lg:py-24" style={{ backgroundColor: '#f5f5f0' }}>
@@ -190,9 +198,9 @@ const News = () => {
         )}
 
         {/* Posts Grid */}
-        {!isLoading && !error && posts.length > 0 && (
+        {!isLoading && !error && postsToDisplay.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {posts.map((post, index) => (
+            {postsToDisplay.map((post, index) => (
               <article
                 key={post.id}
                 className="news-card bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl opacity-0 group"
@@ -282,18 +290,30 @@ const News = () => {
           </div>
         )}
 
-        {/* View All Button */}
-        {!isLoading && !error && posts.length > 0 && (
+        {/* View All / Show Less Button */}
+        {!isLoading && !error && posts.length > 3 && (
           <div className="text-center mt-12">
-            <button
-              onClick={handleViewAllClick}
-              className="inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-600 to-yellow-500 text-white px-8 py-4 rounded-xl font-semibold hover:from-yellow-700 hover:to-yellow-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
-              type="button"
-              aria-label="View all articles"
-            >
-              <span>View All Articles</span>
-              <ExternalLink className="h-5 w-5" />
-            </button>
+            {!showAllArticles ? (
+              <button
+                onClick={handleViewAllClick}
+                className="inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-600 to-yellow-500 text-white px-8 py-4 rounded-xl font-semibold hover:from-yellow-700 hover:to-yellow-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+                type="button"
+                aria-label="View all articles"
+              >
+                <span>View All Articles</span>
+                <ExternalLink className="h-5 w-5" />
+              </button>
+            ) : (
+              <button
+                onClick={handleShowLessClick}
+                className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-600 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+                type="button"
+                aria-label="Show fewer articles"
+              >
+                <span>Show Less</span>
+                <ExternalLink className="h-5 w-5 transform rotate-180" />
+              </button>
+            )}
           </div>
         )}
       </div>
