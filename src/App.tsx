@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import ServicesPage from './pages/ServicesPage';
 import ServiceDetailPage from './pages/ServiceDetailPage';
 import TeamPage from './pages/TeamPage';
+import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 
 function App() {
@@ -14,8 +15,8 @@ function App() {
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/services/:serviceId" element={<ServiceDetailPage />} />
         <Route path="/team" element={<TeamPage />} />
+        <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:postId" element={<BlogPostPage />} />
-        <Route path="/blog" element={<HomePage />} />
       </Routes>
     </div>
   );
